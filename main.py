@@ -28,7 +28,12 @@ long_qnty = 5000/long_open
 def pl( l_bid, l_ask, s_bid, s_ask):
     pl_bid = short_qnty * (s_bid - short_entry) + long_qnty * (l_bid - long_entry)
     pl_ask = short_qnty * (s_ask - short_entry) + long_qnty * (l_ask - long_entry)
-    return pl_bid, pl_ask
+    pl_long_bid_short_ask = short_qnty * (s_ask - short_entry) + long_qnty * (l_bid - long_entry)
+    pl_long_ask_short_bid = short_qnty * (s_bid - short_entry) + long_qnty * (l_ask - long_entry)
+
+    r3 = f"long_bid_short_ask {pl_long_bid_short_ask}"
+    r4 = f"long_ask_short_bid {pl_long_ask_short_bid}"
+    return pl_bid, pl_ask,r3,r4
 
 
 def initialis_instrument():
@@ -41,15 +46,18 @@ def initialis_instrument():
     oil_short = Instrument('XS2819844387', request)
 
 while True:
-    sleep(2)
+    sleep(5)
 
-    time_str = datetime.now().strftime("%Y%m%d-%H%M%S")
-    x = f"{time_str},{products[0]},{isin[0]},{oil_long.ask}, {oil_long.bid}, {oil_long.data} \n"
-    y = f"{time_str},{products[1]},{isin[1]},{oil_short.ask}, {oil_short.bid}, {oil_short.data} \n"
-    
-    print(pl(float(oil_long.bid), float(oil_long.ask), float(oil_short.bid), float(oil_short.ask)))
 
-    date_str = datetime.now().strftime("%Y%m%d")
-    with open(f"ticker_data_log/mats_logs_{date_str}.txt", "a") as file:
-        file.write(x)
-        file.write(y)
+    try:
+        time_str = datetime.now().strftime("%Y%m%d-%H%M%S")
+        x = f"{time_str},{products[0]},{isin[0]},{oil_long.ask}, {oil_long.bid}, {oil_long.data} \n"
+        y = f"{time_str},{products[1]},{isin[1]},{oil_short.ask}, {oil_short.bid}, {oil_short.data} \n"
+        print(pl(float(oil_long.bid), float(oil_long.ask), float(oil_short.bid), float(oil_short.ask)))
+        date_str = datetime.now().strftime("%Y%m%d")
+        with open(f"ticker_data_log/mats_logs_{date_str}.txt", "a") as file:
+            file.write(x)
+            file.write(y)
+    except:
+        print("error")
+
