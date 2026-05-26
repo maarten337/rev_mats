@@ -16,11 +16,11 @@ request = Request(header=header)
 oil_long = Instrument('IE00BMTM6B32', request)
 oil_short = Instrument('XS2819844387', request)
 
-short_open = 1
-long_open = 1
+short_open = 1.5272
+long_open = 49.3
 
-short_entry = 1
-long_entry = 1
+short_entry = short_open
+long_entry = long_open
 
 short_qnty = 5000/short_open
 long_qnty = 5000/long_open
@@ -47,7 +47,7 @@ while True:
     x = f"{time_str},{products[0]},{isin[0]},{oil_long.ask}, {oil_long.bid}, {oil_long.data} \n"
     y = f"{time_str},{products[1]},{isin[1]},{oil_short.ask}, {oil_short.bid}, {oil_short.data} \n"
     
-    print(pl(oil_long.bid, oil_long.ask, oil_short.bid, oil_short.ask))
+    print(pl(float(oil_long.bid), float(oil_long.ask), float(oil_short.bid), float(oil_short.ask)))
 
     date_str = datetime.now().strftime("%Y%m%d")
     with open(f"ticker_data_log/mats_logs_{date_str}.txt", "a") as file:
