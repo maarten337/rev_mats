@@ -17,7 +17,10 @@ oil_long = Instrument('IE00BMTM6B32', request)
 oil_short = Instrument('XS2819844387', request)
 
 short_open = 1.5272
-long_open = 49.3
+long_open = 48.662
+
+
+
 
 short_entry = short_open
 long_entry = long_open
