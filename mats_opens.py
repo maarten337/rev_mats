@@ -1,9 +1,8 @@
 import pandas as pd
 from pathlib import Path
 
-
-long_open = 46.81
-short_open = 1.5603
+short_open = 1.5272
+long_open = 48.662
 
 FILE = "ticker_data_log/mats_logs_opens.csv"
 
@@ -16,7 +15,7 @@ if not Path(FILE).exists():
     df.to_csv(FILE, index=False)
 
 # Nieuwe rij
-new_date = "2026-05-28"
+new_date = "2026-05-29"
 
 new_row = {
     "datum": new_date,
