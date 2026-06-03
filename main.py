@@ -46,8 +46,8 @@ silver_long = Instrument('IE00BMTM6B32', request)
 silver_short = Instrument('XS2819844387', request)
 
 
-oil_short_open = 1.5272
-oil_long_open = 48.662
+oil_short_open = 1.5468
+oil_long_open = 46.52
 
 oil_short_entry = oil_short_open
 oil_long_entry = oil_long_open
@@ -55,7 +55,7 @@ oil_long_entry = oil_long_open
 oil_short_qnty = 5000/oil_short_open
 oil_long_qnty = 5000/oil_long_open
 
-oil_bought_ind = True
+oil_bought_ind = False
 oil_note_ts = 0
 
 silver_short_open = 1.22
