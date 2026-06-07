@@ -5,7 +5,7 @@ from time import sleep
 import time
 from datetime import datetime
 import requests
-
+import os
 
 
 def telegram_notify(message):
@@ -52,6 +52,43 @@ lenovo = Instrument('HK0992009065', request)
 geely = Instrument('KYG3777B1032', request)
 
 
+#covered calls
+cc_nsdq = Instrument('IE00BM8R0J59', request)
+cc_sp500 = Instrument('IE0002L5QB31', request)
+cc_stoxx = Instrument('IE000SAXJ1M1', request)
+
+
+#asian etf
+japan = Instrument('IE00B4L5YX21', request)
+korea = Instrument('IE00B5W4TY14', request)
+china = Instrument('HK0992009065', request)
+
+
+if not os.path.exists("ticker_data_log/etfs/korea"):
+    os.makedirs("ticker_data_log/etfs/korea")
+
+if not os.path.exists("ticker_data_log/etfs/japan"):
+    os.makedirs("ticker_data_log/etfs/japan")
+
+if not os.path.exists("ticker_data_log/etfs/china"):
+    os.makedirs("ticker_data_log/etfs/china")
+
+if not os.path.exists("ticker_data_log/covered_calls"):
+    os.makedirs("ticker_data_log/covered_calls")
+
+if not os.path.exists("ticker_data_log/covered_calls/cc_sp500"):
+    os.makedirs("ticker_data_log/covered_calls/cc_sp500")
+
+if not os.path.exists("ticker_data_log/covered_calls/cc_nsdq"):
+    os.makedirs("ticker_data_log/covered_calls/cc_nsdq")
+
+if not os.path.exists("ticker_data_log/covered_calls/cc_stoxx"):
+    os.makedirs("ticker_data_log/covered_calls/cc_stoxx")
+
+
+
+
+
 oil_short_open = 1.5468
 oil_long_open = 46.52
 
@@ -64,8 +101,8 @@ oil_long_qnty = 5000/oil_long_open
 oil_bought_ind = False
 oil_note_ts = 0
 
-silver_short_open = 1.22
-silver_long_open = 48.662
+silver_short_open = 1.3548
+silver_long_open = 52.915
 
 silver_short_entry = silver_short_open
 silver_long_entry = silver_long_open
@@ -79,6 +116,12 @@ def write_log(instrument,name):
     log = f"{time_str},{name},{instrument.bid},{instrument.ask},{instrument.data} \n"
     with open(f"ticker_data_log/hkex/{name}/mats_logs_{date_str}.txt", "a") as file:
         file.write(log)
+
+def write_log2(instrument,name,location):
+    log = f"{time_str},{name},{instrument.bid},{instrument.ask},{instrument.data} \n"
+    with open(f"{location}/logs_{date_str}.txt", "a") as file:
+        file.write(log)
+
 
 def pl_oil( l_bid, l_ask, s_bid, s_ask):
     long_bid = float(str(l_bid).replace(",", "."))
@@ -114,7 +157,7 @@ def pl_silver( l_bid, l_ask, s_bid, s_ask):
 
 
 while True:
-    sleep(5)
+    sleep(10)
 
 
     try:
@@ -140,6 +183,13 @@ while True:
         write_log(byd,'byd')
         write_log(geely,'geely')
 
+        write_log2(cc_sp500,'cc_sp500','ticker_data_log/covered_calls/cc_sp500')
+        write_log2(cc_nsdq, 'cc_nsdq', 'ticker_data_log/covered_calls/cc_nsdq')
+        write_log2(cc_stoxx, 'cc_stoxx', 'ticker_data_log/covered_calls/cc_stoxx')
+
+        write_log2(korea,'korea','ticker_data_log/etfs/korea')
+        write_log2(japan, 'japan', 'ticker_data_log/etfs/japan')
+        write_log2(korea, 'china', 'ticker_data_log/etfs/china')
 
         if pl_oil(oil_long.bid, oil_long.ask, oil_short.bid, oil_short.ask)[1] > 30 and oil_bought_ind is True and time.time() - oil_note_ts > 300:
             telegram_notify(f"SELL OIL AT {datetime.now()}: {pl_oil(oil_long.bid, oil_long.ask, oil_short.bid, oil_short.ask)}")
@@ -147,4 +197,3 @@ while True:
 
     except Exception as e:
         print(e)
-
